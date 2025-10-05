@@ -4,7 +4,7 @@ import uuid
 from contextlib import asynccontextmanager
 
 
-from main.middleware.redis_limit_middleware import RedisLimitMiddleware
+from middleware.redis_limit_middleware import RedisLimitMiddleware
 
 from loguru import logger
 from fastapi import FastAPI, HTTPException, Request, Depends
@@ -45,7 +45,14 @@ app.add_middleware(
 app.add_middleware(RedisLimitMiddleware, limit=5, window=60)
 
 
+@app.get("/")
+async def root():
+    return {"msg": "hello world"}
 
+@app.get("/limited-global")
+async def limited_global():
+    return {"msg": "this uses global middleware limit"}
+    
 
 
 
